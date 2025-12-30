@@ -1,0 +1,24 @@
+import os
+from langchain_groq import GroqChat
+import streamlit as st
+
+
+class groqllm:
+    def __init__(self,user_controls_input):
+        self.user_controls_input = user_controls_input
+        
+
+    def get_llm_model(self):
+        try:
+            groq_api_key = self.user_controls_input['GROQ_API_KEY']
+            selected_groq_model = self.user_controls_input['selected_groq_model']
+            if groq_api_key == '' and os.environ['GROQ_API_KEY'] == '':
+                st.error("GROQ API key is required")
+                
+
+            llm=GroqChat(model_name=selected_groq_model,api_key=groq_api_key)
+            
+            
+        except Exception as e:
+            st.error(f"Error: {str(e)}")
+        return llm
