@@ -1,6 +1,7 @@
 from src.langgraphagenticai.ui.streamlitui.loadui import LoadStreamlitUI
 from src.langgraphagenticai.LLM.groqllm import GroqLLM
 from src.langgraphagenticai.graph.graph_builder import GraphBuilder
+from src.langgraphagenticai.ui.streamlitui.disply_result import DisplayResultStreamlit
 import json
 import streamlit as st
 
@@ -10,50 +11,46 @@ def load_langgraph_agenticai_app():
     Load LangGraph Agentic AI App
     """
 
-    ui=LoadStreamlitUI()
-    user_input=ui.load_streamlitui()
+    ui = LoadStreamlitUI()
+    user_input = ui.load_streamlitui()
 
     if not user_input:
-        st.error('Please select a use case')
+        st.error('Error: Failed to load user input')
         return
 
+    # Capture user message separately from usecase_option
     if st.session_state.IsFetchButtonClicked:
-        user_input['usecase_option']=st.session_state.timeframe
+        user_message = st.session_state.timeframe
     else:
-        user_input['usecase_option']= st.chat_input("Enter Use message:")
+        user_message = st.chat_input("Enter your message:")
 
-    if user_input:
+    if user_message:
         try:
-            obj_llm_config=GroqLLM('user_controls_input=user_input')
-            model=obj_llm_config.get_llm_model()
+            obj_llm_config = GroqLLM(user_input)
+            model = obj_llm_config.get_llm_model()
 
             if not model:
-                st.error('Please provide a valid model name')
+                st.error('Error: LLM model cannot be initialized')
                 return
 
-            usecase=user_input['selected_usecase']
+            usecase = user_input.get('usecase_option')
             if not usecase:
-                st.error('Please select a use case')
+                st.error('Error: Usecase not selected')
                 return
 
-                ### Graph Builder
-
-            graph_builder=GraphBuilder(model)
+            ### Graph Builder
+            graph_builder = GraphBuilder(model)
 
             try:
-                graph=graph_builder.setup_graph(usecase)
+                graph = graph_builder.setup_graph(usecase)
+                if graph:
+                    display_result = DisplayResultStreamlit(usecase, graph, user_message)
+                    display_result.display_result_on_ui()
+                else:
+                    st.error(f"Error: Could not setup graph for usecase '{usecase}'")
             except Exception as e:
-                st.error(f"Error occured with exception: {str(e)}")
+                st.error(f"Error occurred with exception: {str(e)}")
                 return
-        
+
         except Exception as e:
-            st.error(f"Error occured with exception: {str(e)}")
-
-            
-        
-
-
-        
-    
-
-    
+            st.error(f"Error occurred with exception: {str(e)}")

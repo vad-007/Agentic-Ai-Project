@@ -32,7 +32,7 @@ class GraphBuilder:
         """
         Setup the graph by adding the basic chat node to the graph.
         """
-        if usecase == "basic_chatbot":
+        if usecase.lower().replace(" ", "_") == "basic_chatbot":
             self.basic_chatbot_build_graph()
             return self.graph_builder.compile()
         

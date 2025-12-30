@@ -18,4 +18,4 @@ class Config:
         return self.config['DEFAULT'].get('WELCOME_MESSAGE', 'Welcome to LangGraph Agentic AI!')
 
     def get_groq_model_options(self):
-        return self.config['DEFAULT'].get('Groq_MODEL_OPTIONS', 'llama-2-70b-chat,groq-4-turbo,groq-4,groq-3.5-turbo,groq-3.5').split(',')
+        return self.config['DEFAULT'].get('Groq_MODEL_OPTIONS', 'llama-3.1-8b-instant').split(',')

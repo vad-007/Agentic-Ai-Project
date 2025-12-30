@@ -1,14 +1,9 @@
-from langchain.tools import tool
-from langchain.chat_models import init_chat_model
-from langchain_core.messages import SystemMessage
-from typing import Literal
-from langchain_core.messages import Message
-from typing_extensions import TypedDict, Annotated
+from typing import Literal, Annotated
 import operator
-from langgraph.graph import StateGraph, START, END, add_messages
-import datetime
+from typing_extensions import TypedDict
+from langgraph.graph import add_messages
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
-class State (TypedDict):
+class State(TypedDict):
     """Represent the state of the graph"""
-
-    messages:Annotated[list, add_messages]
+    messages: Annotated[list, add_messages]
