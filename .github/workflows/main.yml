@@ -24,6 +24,6 @@ jobs:
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run:  git push --force https://Deepak2025:$HF_TOKEN@huggingface.co/spaces/Deepak2025/Aiagent007 main
+        run: huggingface-cli upload Deepak2025/Aiagent007 . --repo-type space
        
          
